@@ -1,4 +1,4 @@
-classdef coordinator_router2 < matlab.DiscreteEventSystem
+classdef coordinator_router1 < matlab.DiscreteEventSystem
     % untitled2 Add summary here
     %
     % This template includes the minimum set of functions required
@@ -27,7 +27,7 @@ classdef coordinator_router2 < matlab.DiscreteEventSystem
     methods
         function [entity,events] = entry(obj,storage,entity,source)
             % 定数
-            if rem(stampEntity() - 1, 7) == 0 || rem(stampEntity() - 5, 7) == 0
+            if rem(stampEntity() - 3, 7) == 0
                 events = obj.eventForward('output', 1, 1);
             else
                 events = obj.eventDestroy(); 

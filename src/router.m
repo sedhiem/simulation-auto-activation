@@ -13,8 +13,8 @@ classdef router < matlab.DiscreteEventSystem
     % Capacity
         Capacity = 1;
     % Delay
-        Delay = 4;
-        routerID = 1;
+        Delay = 0;
+        routerID = 2;
     end
 
     properties(DiscreteState)
@@ -32,7 +32,7 @@ classdef router < matlab.DiscreteEventSystem
             % Specify event actions when entity enters storage
             % disp(['Entity of ID ' num2str(entity.sys.id) ' has entered storage element ' num2str(storage)]);
             coder.extrinsic('fprintf');
-            fprintf('At time %d entity of ID %d of ChainID %d has entered storage element %d at router %d\n', stampEntity(), int64(entity.sys.id), entity.data.ChainID, int64(storage), obj.routerID);
+            %fprintf('At time %d entity of ID %d of ChainID %d has entered storage element %d at router %d\n', stampEntity(), int64(entity.sys.id), entity.data.ChainID, int64(storage), obj.routerID);
             %source.typeはinput or strorage
             switch source.type
                 case 'input'
@@ -53,7 +53,7 @@ classdef router < matlab.DiscreteEventSystem
                         if entity.data.InterestData == 3
                             events = obj.eventDestroy();
                         else
-                            events = obj.eventForward('output', 2, obj.Delay);
+                            events = obj.eventForward('output', 2, 1);
                         end
                     else
                         events = obj.eventDestroy();
