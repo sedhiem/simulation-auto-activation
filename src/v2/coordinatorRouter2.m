@@ -1,4 +1,4 @@
-classdef coordinator_router2 < matlab.DiscreteEventSystem
+classdef coordinatorRouter2 < matlab.DiscreteEventSystem
     % untitled2 Add summary here
     %
     % This template includes the minimum set of functions required
