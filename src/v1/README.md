@@ -13,3 +13,9 @@
 |        | Consumer1 | Consumer2 |
 | ------ | --------- | --------- |
 | Period | 7         | 7         |
+
+#### Function 実行時間
+
+|       | Router1 | Router1 |
+| ----- | ------- | ------- |
+| Delay | 2       | 4       |
