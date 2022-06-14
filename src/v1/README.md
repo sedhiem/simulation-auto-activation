@@ -16,6 +16,6 @@
 
 #### Function 実行時間
 
-|       | Router1 | Router1 |
+|       | Router1 | Router2 |
 | ----- | ------- | ------- |
 | Delay | 2       | 4       |
