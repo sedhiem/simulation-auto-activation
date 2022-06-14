@@ -6,7 +6,7 @@
 | ----- | -------- | ------ | -------- |
 | Count | 2        | 2      | 1        |
 
-<img src="/src/public/image/v1.png" alt="v1のネットワーク" title="v1のネットワーク"></img>
+<img src="/src/public/image/v1/nw.png" alt="v1のネットワーク" title="v1のネットワーク"></img>
 
 #### Consumer の周期
 
