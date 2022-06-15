@@ -45,12 +45,15 @@ classdef router < matlab.DiscreteEventSystem
                             entity.data.TimeStamp2 = obj.CacheTS;
                             if entity.data.InterestData == 1
                                 entity.data.InterestData = 2;
+                            elseif entity.data.InterestData == 2
+                                entity.data.InterestData = 3;
                             end
                             events = obj.eventForward('output', 2, 1);
                         end
                     elseif source.index == 2 %inputの2
                         obj.CacheTS = entity.data.TimeStamp2;
-                        if entity.data.InterestData == 3
+                        % 擬似コンシューマかどうか
+                        if entity.data.InterestData == 4
                             events = obj.eventDestroy();
                         else
                             events = obj.eventForward('output', 2, 1);

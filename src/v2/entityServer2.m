@@ -8,6 +8,7 @@ switch entity.ChainID
             u = 10 - delay;
         end
     case 2
+    case 3
         if delay < 10
             u = 10 - 0.1 .* delay .^ 2;
         else
