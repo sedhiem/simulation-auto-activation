@@ -14,7 +14,7 @@ classdef router3 < matlab.DiscreteEventSystem
         Capacity = 1;
     % Delay
         Delay = 0;
-        routerID = 2;
+        routerID = 3;
     end
 
     properties(DiscreteState)
