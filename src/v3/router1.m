@@ -1,4 +1,4 @@
-classdef router < matlab.DiscreteEventSystem
+classdef router1 < matlab.DiscreteEventSystem
     % untitled Add summary here
     %
     % This template includes the minimum set of functions required
