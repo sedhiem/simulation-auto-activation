@@ -1,4 +1,4 @@
-classdef router1 < matlab.DiscreteEventSystem
+classdef router < matlab.DiscreteEventSystem
     % untitled Add summary here
     %
     % This template includes the minimum set of functions required
@@ -14,7 +14,7 @@ classdef router1 < matlab.DiscreteEventSystem
         Capacity = 1;
     % Delay
         Delay = 0;
-        routerID = 1;
+        routerID = 2;
     end
 
     properties(DiscreteState)
@@ -28,11 +28,8 @@ classdef router1 < matlab.DiscreteEventSystem
 
     % Discrete-event algorithms
     methods
-        function [entity,events] = entry(obj,storage,entity,source)
-            % Specify event actions when entity enters storage
-            % disp(['Entity of ID ' num2str(entity.sys.id) ' has entered storage element ' num2str(storage)]);
+        function [entity,events] = entry(obj,~,entity,source)
             coder.extrinsic('fprintf');
-            %fprintf('At time %d entity of ID %d of ChainID %d has entered storage element %d at router %d\n', stampEntity(), int64(entity.sys.id), entity.data.ChainID, int64(storage), obj.routerID);
             %source.typeはinput or strorage
             switch source.type
                 case 'input'
@@ -45,8 +42,6 @@ classdef router1 < matlab.DiscreteEventSystem
                             entity.data.TimeStamp2 = obj.CacheTS;
                             if entity.data.InterestData == 1
                                 entity.data.InterestData = 2;
-                            elseif entity.data.InterestData == 2
-                                entity.data.InterestData = 3;
                             end
                             events = obj.eventForward('output', 2, 1);
                         end
@@ -75,7 +70,7 @@ classdef router1 < matlab.DiscreteEventSystem
             entityTypes = obj.entityType('NDNPacket');
         end
 
-        function [inputTypes,outputTypes] = getEntityPortsImpl(obj)
+        function [inputTypes,outputTypes] = getEntityPortsImpl(~)
             % Specify entity input and output ports. Return entity types at
             % a port as strings in a cell array. Use empty string to
             % indicate a data port.
@@ -92,15 +87,15 @@ classdef router1 < matlab.DiscreteEventSystem
             O = {1, [1, 2]};
         end
 
-        function setupImpl(obj)
+        function setupImpl(~)
             % Perform one-time calculations, such as computing constants
         end
 
-        function resetImpl(obj)
+        function resetImpl(~)
             % Initialize / reset discrete-state properties
         end
 
-        function num = getNumInputsImpl(obj)
+        function num = getNumInputsImpl(~)
             % Define total number of inputs for system with optional inputs
             num = 2;
             % if obj.UseOptionalInput
@@ -108,7 +103,7 @@ classdef router1 < matlab.DiscreteEventSystem
             % end
         end
 
-        function num = getNumOutputsImpl(obj)
+        function num = getNumOutputsImpl(~)
             % Define total number of outputs for system with optional
             % outputs
             num = 2;
@@ -117,17 +112,17 @@ classdef router1 < matlab.DiscreteEventSystem
             % end
         end
 
-        function name = getInputNamesImpl(obj)
+        function name = getInputNamesImpl(~)
             % Return input port names for System block
             name = ["Int-in", "Data-in"];
         end
 
-        function name = getOutputNamesImpl(obj)
+        function name = getOutputNamesImpl(~)
             % Return output port names for System block
             name = ["Int-out", "Data-out"];
         end
 
-        function names = getSimulinkFunctionNamesImpl(obj)
+        function names = getSimulinkFunctionNamesImpl(~)
             % Return names of functions that will call Simulink
             % functions. For example, ["mySimulinkFunction", "myStateflowFunction"]
             names = "stampEntity";
