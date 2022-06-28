@@ -25,7 +25,7 @@ classdef producer < matlab.DiscreteEventSystem
 
     % Discrete-event algorithms
     methods
-        function [entity,events] = entry(obj,storage,entity,source)
+        function [entity,events] = entry(obj,~,entity,~)
             % Specify event actions when entity enters storage
             entity.data.TimeStamp2 = stampEntity();
             events = obj.eventForward('output', 1, obj.Delay);
@@ -39,11 +39,11 @@ classdef producer < matlab.DiscreteEventSystem
             entityTypes = obj.entityType('NDNPacket');
         end
 
-        function [inputTypes,outputTypes] = getEntityPortsImpl(obj)
+        function [inputTypes,outputTypes] = getEntityPortsImpl(~)
             % Specify entity input and output ports. Return entity types at
             % a port as strings in a cell array. Use empty string to
             % indicate a data port.
-            inputTypes = {'NDNPacket'};
+            inputTypes = {'NDNPacket','NDNPacket'};
             outputTypes = {'NDNPacket'};
         end
 
@@ -51,27 +51,27 @@ classdef producer < matlab.DiscreteEventSystem
             % Return entity storage specification and connectivity
             % information from input ports and output ports to storage
             storageSpec = obj.queueFIFO('NDNPacket', obj.Capacity);
-            I = 1;
+            I = 2;
             O = 1;
         end
 
-        function setupImpl(obj)
+        function setupImpl(~)
             % Perform one-time calculations, such as computing constants
         end
 
-        function resetImpl(obj)
+        function resetImpl(~)
             % Initialize / reset discrete-state properties
         end
 
-        function num = getNumInputsImpl(obj)
+        function num = getNumInputsImpl(~)
             % Define total number of inputs for system with optional inputs
-            num = 1;
+            num = 2;
             % if obj.UseOptionalInput
             %     num = 2;
             % end
         end
 
-        function num = getNumOutputsImpl(obj)
+        function num = getNumOutputsImpl(~)
             % Define total number of outputs for system with optional
             % outputs
             num = 1;
@@ -80,7 +80,7 @@ classdef producer < matlab.DiscreteEventSystem
             % end
         end
 
-        function names = getSimulinkFunctionNamesImpl(obj)
+        function names = getSimulinkFunctionNamesImpl(~)
             % Return names of functions that will call Simulink
             % functions. For example, ["mySimulinkFunction", "myStateflowFunction"]
             names = "stampEntity";

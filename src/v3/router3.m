@@ -37,14 +37,7 @@ classdef router3 < matlab.DiscreteEventSystem
                 case 'input'
                     % source.indexはInput or storage index
                     if source.index == 1
-                        if entity.data.ChainID == 1 || entity.data.ChainID == 3
-                            if obj.CacheTS_1_3 == 0
-                                events = obj.eventForward('output', 1, 1);
-                            else
-                                entity.data.TimeStamp2 = obj.CacheTS_1_3;
-                                events = obj.eventForward('output', 2, 1);
-                            end
-                        elseif entity.data.ChainID == 2
+                        if entity.data.ChainID == 2
                             if obj.CacheTS_2 == 0
                                 events = obj.eventForward('output', 1, 1);
                             else
@@ -52,12 +45,19 @@ classdef router3 < matlab.DiscreteEventSystem
                                 entity.data.InterestData = 2;
                                 events = obj.eventForward('output', 2, 1);
                             end
+                        else
+                            if obj.CacheTS_1_3 == 0
+                                events = obj.eventForward('output', 1, 1);
+                            else
+                                entity.data.TimeStamp2 = obj.CacheTS_1_3;
+                                events = obj.eventForward('output', 2, 1);
+                            end
                         end
                     elseif source.index == 2
-                        if entity.data.ChainID == 1
-                            obj.CacheTS_1_3 = entity.data.TimeStamp2;
-                        elseif entity.data.ChainID == 2
+                        if entity.data.ChainID == 2
                             obj.CacheTS_2 = entity.data.TimeStamp2;
+                        else
+                            obj.CacheTS_1_3 = entity.data.TimeStamp2;
                         end
                         if entity.data.InterestData == 4
                             events = obj.eventDestroy();

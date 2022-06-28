@@ -10,7 +10,8 @@ classdef coordinatorRouter3 < matlab.DiscreteEventSystem
     end
 
     properties(Nontunable)
-        routerID = 1;
+        Capacity = 1;
+        routerID = 3;
         delay = 1;
     end
 
@@ -36,17 +37,32 @@ classdef coordinatorRouter3 < matlab.DiscreteEventSystem
     end
 
     methods(Access = protected)
-        function setupImpl(obj)
+        function setupImpl(~)
             % Perform one-time calculations, such as computing constants
         end
 
-        function resetImpl(obj)
-            % Initialize / reset discrete-state properties
+        function num = getNumInputsImpl(~)
+            % Define total number of outputs for system with optional
+            num = 2;
         end
 
         function num = getNumOutputsImpl(~)
             % Define total number of outputs for system with optional
-            num = 1;
+            num = 2;
+        end
+
+        function entityTypes = getEntityTypesImpl(obj)
+            % Return entity type structures with fields specifying
+            % properties such as name, size, data type, and complexity
+            entityTypes = obj.entityType('StartPseudoConsumer');
+        end
+
+        function [storageSpec,I,O] = getEntityStorageImpl(obj)
+            % Return entity storage specification and connectivity
+            % information from input ports and output ports to storage
+            storageSpec = obj.queueFIFO('StartPseudoConsumer', obj.Capacity);
+            I = {1, 1};
+            O = {1, 1};
         end
 
         function hasThreshold = calcThreshold(~)
