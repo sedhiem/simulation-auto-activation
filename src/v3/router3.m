@@ -6,7 +6,8 @@ classdef router3 < matlab.DiscreteEventSystem
 
     % Public, tunable properties
     properties
-        CacheTS = 0;
+        CacheTS_1_3 = 0; %ChainID:1, 3のキャッシュ
+        CacheTS_2 = 0; %ChainID:2のキャッシュ
     end
 
     properties(Nontunable)
@@ -28,31 +29,36 @@ classdef router3 < matlab.DiscreteEventSystem
 
     % Discrete-event algorithms
     methods
-        function [entity,events] = entry(obj,storage,entity,source)
+        function [entity,events] = entry(obj,~,entity,source)
             % Specify event actions when entity enters storage
-            % disp(['Entity of ID ' num2str(entity.sys.id) ' has entered storage element ' num2str(storage)]);
             coder.extrinsic('fprintf');
-            %fprintf('At time %d entity of ID %d of ChainID %d has entered storage element %d at router %d\n', stampEntity(), int64(entity.sys.id), entity.data.ChainID, int64(storage), obj.routerID);
             %source.typeはinput or strorage
             switch source.type
                 case 'input'
                     % source.indexはInput or storage index
-                    if source.index == 1 %inputの1 Consumer1
-                        if obj.CacheTS == 0 %キャッシュされているものがない
-                            %eventForward('storage or output', port index, delay)
-                            events = obj.eventForward('output', 1, 1);
-                        else
-                            entity.data.TimeStamp2 = obj.CacheTS;
-                            if entity.data.InterestData == 1
-                                entity.data.InterestData = 2;
-                            elseif entity.data.InterestData == 2
-                                entity.data.InterestData = 3;
+                    if source.index == 1
+                        if entity.data.ChainID == 1 || entity.data.ChainID == 3
+                            if obj.CacheTS_1_3 == 0
+                                events = obj.eventForward('output', 1, 1);
+                            else
+                                entity.data.TimeStamp2 = obj.CacheTS_1_3;
+                                events = obj.eventForward('output', 2, 1);
                             end
-                            events = obj.eventForward('output', 2, 1);
+                        elseif entity.data.ChainID == 2
+                            if obj.CacheTS_2 == 0
+                                events = obj.eventForward('output', 1, 1);
+                            else
+                                entity.data.TimeStamp2 = obj.CacheTS_2;
+                                entity.data.InterestData = 2;
+                                events = obj.eventForward('output', 2, 1);
+                            end
                         end
-                    elseif source.index == 2 %inputの2
-                        obj.CacheTS = entity.data.TimeStamp2;
-                        % 擬似コンシューマかどうか
+                    elseif source.index == 2
+                        if entity.data.ChainID == 1
+                            obj.CacheTS_1_3 = entity.data.TimeStamp2;
+                        elseif entity.data.ChainID == 2
+                            obj.CacheTS_2 = entity.data.TimeStamp2;
+                        end
                         if entity.data.InterestData == 4
                             events = obj.eventDestroy();
                         else
@@ -75,7 +81,7 @@ classdef router3 < matlab.DiscreteEventSystem
             entityTypes = obj.entityType('NDNPacket');
         end
 
-        function [inputTypes,outputTypes] = getEntityPortsImpl(obj)
+        function [inputTypes,outputTypes] = getEntityPortsImpl(~)
             % Specify entity input and output ports. Return entity types at
             % a port as strings in a cell array. Use empty string to
             % indicate a data port.
@@ -92,42 +98,33 @@ classdef router3 < matlab.DiscreteEventSystem
             O = {1, [1, 2]};
         end
 
-        function setupImpl(obj)
+        function setupImpl(~)
             % Perform one-time calculations, such as computing constants
         end
 
-        function resetImpl(obj)
+        function resetImpl(~)
             % Initialize / reset discrete-state properties
         end
 
-        function num = getNumInputsImpl(obj)
-            % Define total number of inputs for system with optional inputs
+        function num = getNumInputsImpl(~)
             num = 2;
-            % if obj.UseOptionalInput
-            %     num = 2;
-            % end
         end
 
-        function num = getNumOutputsImpl(obj)
-            % Define total number of outputs for system with optional
-            % outputs
+        function num = getNumOutputsImpl(~)
             num = 2;
-            % if obj.UseOptionalOutput
-            %     num = 2;
-            % end
         end
 
-        function name = getInputNamesImpl(obj)
+        function name = getInputNamesImpl(~)
             % Return input port names for System block
             name = ["Int-in", "Data-in"];
         end
 
-        function name = getOutputNamesImpl(obj)
+        function name = getOutputNamesImpl(~)
             % Return output port names for System block
             name = ["Int-out", "Data-out"];
         end
 
-        function names = getSimulinkFunctionNamesImpl(obj)
+        function names = getSimulinkFunctionNamesImpl(~)
             % Return names of functions that will call Simulink
             % functions. For example, ["mySimulinkFunction", "myStateflowFunction"]
             names = "stampEntity";
