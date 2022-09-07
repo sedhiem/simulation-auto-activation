@@ -29,42 +29,50 @@ classdef router < matlab.DiscreteEventSystem
     % Discrete-event algorithms
     methods
         function [entity,events] = entry(obj,storage,entity,source)
-            % Specify event actions when entity enters storage
-            % disp(['Entity of ID ' num2str(entity.sys.id) ' has entered storage element ' num2str(storage)]);
             coder.extrinsic('fprintf');
-            %fprintf('At time %d entity of ID %d of ChainID %d has entered storage element %d at router %d\n', stampEntity(), int64(entity.sys.id), entity.data.ChainID, int64(storage), obj.routerID);
-            %source.typeはinput or strorage
-            switch source.type
-                case 'input'
-                    % source.indexはInput or storage index
-                    if source.index == 1 %inputの1 Consumer1
-                        if obj.CacheTS == 0 %キャッシュされているものがない
-                            %eventForward('storage or output', port index, delay)
-                            events = obj.eventForward('output', 1, 1);
-                        else
-                            entity.data.TimeStamp2 = obj.CacheTS;
-                            if entity.data.InterestData == 1
-                                entity.data.InterestData = 2;
-                            elseif entity.data.InterestData == 2
-                                entity.data.InterestData = 3;
-                            end
-                            events = obj.eventForward('output', 2, 1);
-                        end
-                    elseif source.index == 2 %inputの2
-                        obj.CacheTS = entity.data.TimeStamp2;
-                        % 擬似コンシューマかどうか
-                        if entity.data.InterestData == 4
-                            events = obj.eventDestroy();
-                        else
-                            events = obj.eventForward('output', 2, 1);
-                        end
-                    else
-                        events = obj.eventDestroy();
-                    end
-                otherwise
-                    fprintf('Entry from storage\n');
-                    events = obj.eventDestroy();
+            if source.type ~= "input" %source.typeはinput or strorage
+                fprintf('Entry from storage\n');
+                events = obj.eventDestroy();
+                return;
             end
+            if source.index == 1
+                if obj.CacheTS == 0 
+                    events = obj.eventForward('output', 1, 1);
+                    return;
+                end
+                entity.data.TimeStamp2 = obj.CacheTS;
+                if obj.routerID == 1
+                    entity.data.timeStampRouter1 = obj.CacheTS;
+                end
+                if obj.routerID == 2
+                    entity.data.timeStampRouter2 = obj.CacheTS;
+                end
+                if obj.routerID == 3
+                    entity.data.timeStampRouter3 = obj.CacheTS;
+                end
+                events = obj.eventForward('output', 2, 1);
+                return;
+            end
+            if source.index == 2
+                obj.CacheTS = stampEntity();
+                if obj.routerID == 1
+                    entity.data.timeStampRouter1 = obj.CacheTS;
+                end
+                if obj.routerID == 2
+                    entity.data.timeStampRouter2 = obj.CacheTS;
+                end
+                if obj.routerID == 3
+                    entity.data.timeStampRouter3 = obj.CacheTS;
+                end
+                if entity.data.InterestData == 4 % 擬似コンシューマかどうか
+                    events = obj.eventDestroy();
+                    return;
+                end
+                events = obj.eventForward('output', 2, 1);
+                return;
+            end
+            events = obj.eventDestroy();
+            return;
         end
     end
 
@@ -75,7 +83,7 @@ classdef router < matlab.DiscreteEventSystem
             entityTypes = obj.entityType('NDNPacket');
         end
 
-        function [inputTypes,outputTypes] = getEntityPortsImpl(obj)
+        function [inputTypes,outputTypes] = getEntityPortsImpl(~)
             % Specify entity input and output ports. Return entity types at
             % a port as strings in a cell array. Use empty string to
             % indicate a data port.
