@@ -3,7 +3,7 @@ u = 0;
 if delay == 1
     u = 10;
 else
-    u = 10 - delay;
+    u = 11 - delay;
 end
 entity.Data = u;
 utility = addUtility(u);
