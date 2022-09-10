@@ -25,9 +25,9 @@ classdef coordinatorRouter1 < matlab.DiscreteEventSystem
 
     % Discrete-event algorithms
     methods
-        function [entity,events] = entry(obj,storage,entity,source)
+        function [entity,events] = entry(obj,~,entity,~)
             % 定数
-            if rem(stampEntity() - 3, 7) == 0
+            if rem(stampEntity() + 1 + 1 + 2, 7) == 0
                 events = obj.eventForward('output', 1, 1);
             else
                 events = obj.eventDestroy(); 

@@ -25,9 +25,9 @@ classdef coordinatorRouter3 < matlab.DiscreteEventSystem
 
     % Discrete-event algorithms
     methods
-        function [entity,events] = entry(obj,storage,entity,source)
+        function [entity,events] = entry(obj, ~, entity, ~)
             % Consumer1の条件 || Consumer2の条件 || Consumer3の条件
-            if rem(stampEntity() - 4, 7) == 0 || rem(stampEntity(), 7) == 0 || rem(stampEntity() - 5, 7) == 0
+            if rem(stampEntity() + 4 - 1 - 4 - 1 - 7, 7) == 0 || rem(stampEntity() + 6 - 1 - 7, 7) == 0 || rem(stampEntity() + 1 + 1 + 7, 7) == 0
                 events = obj.eventForward('output', 1, 1);
             else
                 events = obj.eventDestroy(); 
@@ -36,11 +36,11 @@ classdef coordinatorRouter3 < matlab.DiscreteEventSystem
     end
 
     methods(Access = protected)
-        function setupImpl(obj)
+        function setupImpl(~)
             % Perform one-time calculations, such as computing constants
         end
 
-        function resetImpl(obj)
+        function resetImpl(~)
             % Initialize / reset discrete-state properties
         end
 
