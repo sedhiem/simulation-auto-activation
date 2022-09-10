@@ -12,7 +12,7 @@
 
 |        | Consumer1 | Consumer2 | Consumer3 |
 | ------ | --------- | --------- | --------- |
-| Period | 3         | 5         | 7         |
+| Period | 15        | 12        | 7         |
 
 ## Function 実行時間
 
