@@ -6,10 +6,11 @@ else
     u = 11 - delay;
 end
 entity.Data = u;
-utility = addUtility(u);
-entity.Utility = utility;
-coder.extrinsic('fprintf');
+entity.Utility = u;
+entity.totalUtility = addUtility(u);
 requestCount = sumRequestCount(1);
+entity.utilityPerRequestCount = entity.totalUtility/requestCount;
+coder.extrinsic('fprintf');
 fprintf('requestCount: %d\n', requestCount);
-fprintf('utility per requestCount: %d\n', utility/requestCount);
-fprintf('ChainID: %d, u: %d , delay: %d Utility: %d, TimeStamp: %d\n', entity.ChainID, u, delay, utility, stampEntity());
+fprintf('utility per requestCount: %d\n', entity.utilityPerRequestCount);
+fprintf('ChainID: %d, u: %d , delay: %d Utility: %d, TimeStamp: %d\n', entity.ChainID, u, delay, entity.totalUtility, stampEntity());
