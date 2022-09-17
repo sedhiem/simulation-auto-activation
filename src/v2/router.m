@@ -55,6 +55,10 @@ classdef router < matlab.DiscreteEventSystem
             end
             if source.index == 2
                 obj.CacheTS = stampEntity();
+                if entity.data.InterestData == 4 % 擬似コンシューマかどうか
+                    events = obj.eventDestroy();
+                    return;
+                end
                 if obj.routerID == 1
                     entity.data.timeStampRouter1 = obj.CacheTS;
                 end
@@ -63,10 +67,6 @@ classdef router < matlab.DiscreteEventSystem
                 end
                 if obj.routerID == 3
                     entity.data.timeStampRouter3 = obj.CacheTS;
-                end
-                if entity.data.InterestData == 4 % 擬似コンシューマかどうか
-                    events = obj.eventDestroy();
-                    return;
                 end
                 events = obj.eventForward('output', 2, 1);
                 return;
