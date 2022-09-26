@@ -19,3 +19,9 @@
 |       | Router1 | Router2 | Router3 |
 | ----- | ------- | ------- | ------- |
 | Delay | 2       | 4       | 7       |
+
+## Consumer の遅延（位相）
+
+|        | Consumer1 | Consumer2 | Consumer3 |
+| ------ | --------- | --------- | --------- |
+| Period | 1         | 2         | 3         |

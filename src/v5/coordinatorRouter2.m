@@ -27,7 +27,7 @@ classdef coordinatorRouter2 < matlab.DiscreteEventSystem
     methods
         function [entity,events] = entry(obj,~,entity,~)
             % Consumer1の条件 || Consumer2の条件
-            if rem(stampEntity() + 4 - 1 - 4, 15) == 0 || rem(stampEntity() + 1 + 1 + 4, 12) == 0
+            if rem(stampEntity() + 4 - 1 - 4, 15) == 1 || rem(stampEntity() + 1 + 1 + 4, 12) == 2
                 events = obj.eventForward('output', 1, 1);
             else
                 events = obj.eventDestroy(); 
